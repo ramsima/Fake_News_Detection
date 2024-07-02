@@ -1,0 +1,92 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+  color: #333;
+
+}
+
+header {
+  background: #35424a;
+  color: #ffffff;
+  padding: 20px 0;
+  text-align: center;
+  z-index: 2;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 10px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 1.1em;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+main {
+  padding: 20px 0;
+  background: #ffffff;
+}
+
+.intro, .content {
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: red;
+  
+}
+
+footer {
+  background: #35424a;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px 0;
+}
+
+footer p {
+  margin: 0;
+}
+
+.home{
+  
+  background-image : url('fake_news.jpg');
+  background-size :cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  top: 0px;
+  height: 700px;
+  width: 100%;
+  z-index: 1;
+  
+}

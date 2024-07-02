@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock title %}
+
+{% block body %}
+
+<div class="container bg-white p-8 rounded-lg shadow-lg mt-8 w-3/4">
+  <h1 class="text-2xl font-bold mb-4">About the Fake News Detection Project</h1>
+  
+  <!-- Introduction -->
+  <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-2">Introduction</h2>
+      <p>
+          The Fake News Detection Project aims to combat the spread of misinformation by using advanced machine learning and natural language processing techniques to identify and classify fake news. In an era where information is rapidly disseminated, ensuring the credibility of news sources is crucial for informed decision-making and maintaining public trust.
+      </p>
+  </section>
+  
+  <!-- Objectives -->
+  <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-2">Objectives</h2>
+      <ul class="list-disc list-inside">
+          <li>Develop a reliable model to detect fake news with high accuracy.</li>
+          <li>Provide a user-friendly interface for easy use by the general public.</li>
+          <li>Raise awareness about the importance of verifying news sources.</li>
+      </ul>
+  </section>
+  
+  <!-- Technology and Methodology -->
+  <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-2">Technology and Methodology</h2>
+      <p>
+          Our project leverages BERT (Bidirectional Encoder Representations from Transformers), a state-of-the-art machine learning model for natural language processing. BERT helps understand the context of words in a text, making it highly effective for tasks like fake news detection. We also use Flask for the backend API and Tailwind CSS for the front-end design.
+      </p>
+  </section>
+  
+  <!-- Significance and Impact -->
+  <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-2">Significance and Impact</h2>
+      <p>
+          Fake news poses a significant threat to society by spreading misinformation and creating confusion. Our project addresses this issue by providing a tool that can help individuals and organizations verify the authenticity of news articles. By reducing the spread of fake news, we aim to foster a more informed and rational public discourse.
+      </p>
+  </section>
+  
+  <!-- Team -->
+  <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-2">Team</h2>
+      <p>
+          Our team consists of dedicated data scientists, software developers, and researchers with a passion for leveraging technology to solve real-world problems. For more information about our team members and their roles, please visit our <a href="team.html" class="text-blue-500 hover:underline">Team Page</a>.
+      </p>
+  </section>
+  
+  <!-- Acknowledgments -->
+  <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-2">Acknowledgments</h2>
+      <p>
+          We would like to thank our mentors, advisors, and collaborators who have provided invaluable support and guidance throughout this project. Their expertise and encouragement have been instrumental in our success.
+      </p>
+  </section>
+</div>
+
+{% endblock body %}
