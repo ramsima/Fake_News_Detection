@@ -166,12 +166,14 @@ svm = SVC()
 svm.fit(Xv_train, y_train)
 pred_svm = svm.predict(Xv_test)
 
+print(pred_svm)
+
 
 
 
 # Save the model
-with open('svm_model.pkl', 'wb') as file:
-    pickle.dump(svm, file)
+# with open('svm_model.pkl', 'wb') as file:
+#     pickle.dump(svm, file)
 
 
 #y_pred = best_svm.predict(X_test)
