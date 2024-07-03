@@ -56,7 +56,9 @@ def test(request):
       print(fake_news_model)
       
       context = {'news':news,
-                'result':result}
+                'result':result,
+                'model_selected':fake_news_model}
+      
       return render(request, 'test.html', context)
     
     elif fake_news_model == "BERT":
@@ -126,9 +128,18 @@ def test(request):
         preds = preds.detach().cpu().numpy()
 
       preds = np.argmax(preds, axis = 1)
-      print(preds)
+      if preds == 0:
+        preds1 = 1
+      else:
+        preds1 = 0
       
-      context = {'result':preds}
+      print(preds1)
+      
+      context = {'news':news,
+                'result':preds1,
+                'model_selected':fake_news_model}      
+      
+      
       
       
       return render(request,'test.html', context)
@@ -184,7 +195,11 @@ def test(request):
       print(news)
       print(result)
       
-      return render(request, "test.html")
+      context = {'news':news,
+                'result':result,
+                'model_selected':fake_news_model}
+      
+      return render(request, "test.html", context)
       
       
       
@@ -196,7 +211,7 @@ def test(request):
       pass
       
     
-  else:     
+  else:    
     return render(request, "test.html" )
     
 
