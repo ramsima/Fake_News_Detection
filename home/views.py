@@ -177,7 +177,7 @@ def test(request):
         # Use pickle.load to read the data from the file
         svm_model = pickle.load(file)
       
-      with open('home/static/tfidf_vectorizer.pkl', 'rb') as f:
+      with open('home/static/svm_tfidf_vectorizer.pkl', 'rb') as f:
         tfidf_vectorizer = pickle.load(f)
         
         
@@ -202,13 +202,64 @@ def test(request):
       return render(request, "test.html", context)
       
       
-      
-      
-      
-      
     
     elif fake_news_model == "Logistic Regression":
-      pass
+      import numpy as np
+      import pandas as pd
+      import matplotlib.pyplot as plt
+      import seaborn as sns
+      import nltk
+      import re
+      from wordcloud import WordCloud
+      import tensorflow as tf
+      from sklearn.feature_extraction.text import TfidfVectorizer
+      import pickle
+      from sklearn.model_selection import train_test_split
+      from sklearn.metrics import classification_report, accuracy_score
+      import preprocess_kgptalkie as ps
+      from nltk.corpus import stopwords
+      stop_words = stopwords.words('English')
+      
+      import gensim
+      from gensim.utils import simple_preprocess
+      from gensim.parsing.preprocessing import STOPWORDS
+
+      def preprocess(text):
+          result1 =[]
+          for token in gensim.utils.simple_preprocess(text):
+              if token not in gensim.parsing.preprocessing.STOPWORDS and len(token)>3 and token not in stop_words:
+                  result1.append(token)
+
+          return result1 
+        
+      with open('home/static/LR_model.pkl', 'rb') as file:
+        # Use pickle.load to read the data from the file
+        LR_model = pickle.load(file)
+      
+      with open('home/static/LR_tfidf_vectorizer.pkl', 'rb') as f:
+        LR_tfidf_vectorizer = pickle.load(f)
+        
+        
+      news_processed = news.lower()  # Convert to lowercase
+      news_processed = ps.remove_special_chars(news_processed)  # Assuming this is a function for special character removal
+      news_processed = preprocess(news_processed)
+      news_processed_sentence = " ".join(news_processed)
+      print(news_processed_sentence)
+         
+      # Converting words into Vectors
+      news_vector = LR_tfidf_vectorizer.transform([news_processed_sentence])
+      
+      result =  LR_model.predict(news_vector)
+      
+      print(news)
+      print(result)
+      
+      context = {'news':news,
+                'result':result,
+                'model_selected':fake_news_model}
+      
+      return render(request, "test.html", context)
+    
       
     
   else:    
