@@ -3,6 +3,41 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import tensorflow as tf
 from contextlib import redirect_stdout
+from bs4 import BeautifulSoup
+import requests
+
+
+from sklearn.metrics.pairwise import cosine_similarity
+
+
+
+
+
+
+
+def scrape_news(news_headline):
+  url = 'https://news.google.com/search?q='+ news_headline + '&hl=en-US&gl=US&ceid=US%3Aen'
+
+  page = requests.get(url)
+
+  articles = []
+  article_link=[]
+  # Check if the request was successful
+  if page.status_code == 200:
+      # Parse the HTML content with BeautifulSoup
+      soup = BeautifulSoup(page.text, 'lxml')
+      
+      # Find all the news titles on the page
+      for item in soup.find_all('a',class_='JtKRv',href=True):
+          title = item.get_text()
+          href = 'https://news.google.com'+item['href']
+          article_link.append(href)
+          articles.append(title)
+          
+  else:
+      print("Failed to retrieve the page. Status code:", page.status_code)
+      
+  return articles,article_link
 
 
 # Create your views here.
@@ -15,8 +50,109 @@ def test(request):
   if request.method == 'POST':
     fake_news_model = request.POST.get('model')
     news = request.POST.get('news')
+    if fake_news_model == "Real-Time Checking":
+      
+      from transformers import BertTokenizer, BertModel
+      import torch
+      
+      articles,article_link = scrape_news(news)
+      
+      zipped_list=zip(articles,article_link)
+      
+      if(len(articles) != 0 ):
+
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        model = BertModel.from_pretrained('bert-base-uncased')
+        
+        def get_bert_embedding(text):
+          inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+          with torch.no_grad():
+              outputs = model(**inputs)
+          return outputs.last_hidden_state.mean(dim=1).numpy()
+        
+        user_embedding = get_bert_embedding(news)
+        scraped_embeddings = [get_bert_embedding(article) for article in articles]
+        
+        
+        # Calculate cosine similarity for each scraped news article
+        similarity_scores = [(index, cosine_similarity(user_embedding, embedding).flatten()[0]) 
+                            for index, embedding in enumerate(scraped_embeddings)]
+
+        # Sort the scores in descending order
+        sorted_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+        
+        print(sorted_scores)
+        
+        if(len(sorted_scores) >= 10):
+          avg_similarity_score_top_10 = 0
+          
+          sorted_top_10_scores = [sorted_scores[0],sorted_scores[1],sorted_scores[2],sorted_scores[3],sorted_scores[4],sorted_scores[5],sorted_scores[6],sorted_scores[7],sorted_scores[8],sorted_scores[9]]
+          
+          
+          for index, score in sorted_top_10_scores:
+            print(score)
+            avg_similarity_score_top_10 = avg_similarity_score_top_10 + score
+        
+          avg_similarity_score_top_10 = avg_similarity_score_top_10/10
+        else:
+          avg_similarity_score_top_10 = 0
+          
+          sorted_top_10_scores = []
+          for i in range(len(sorted_scores)):
+            sorted_top_10_scores.append(sorted_scores[i])
+            
+          
+          for index, score in sorted_top_10_scores:
+            print(score)
+            avg_similarity_score_top_10 = avg_similarity_score_top_10 + score
+
+          avg_similarity_score_top_10 = avg_similarity_score_top_10/len(sorted_scores)
+        
+        
+          
+     
+        
+        
+        
+        
+        print(avg_similarity_score_top_10)
+        
+        context = {'news':news,
+                   'result':avg_similarity_score_top_10,
+                   'model_selected':fake_news_model,
+                   'articles':articles,
+                   'zipped_list':zipped_list
+                   }
+
+        # # Get the most similar article
+        # most_similar_index, highest_score = sorted_scores[0]
+        
+
+        # # Output the most similar article
+        # print(f"Most Similar Article {most_similar_index + 1}:")
+        # print(f"Similarity Score = {highest_score}")
+        # print(f"Text: {articles[most_similar_index]}\n")
+
+        
+
+        # Output the most similar articles in descending order of similarity
+        # for index, score in sorted_scores:
+        #     print(f"Article {index + 1}: Similarity Score = {score}")
+        #     print(f"Text: {articles[index]}\n")
+
+      else:
+        result1 = "Sorry, There is not a single related news articles!"
+        context = {'news':news,
+                   'result':result1,
+                   'model_selected':fake_news_model}
+      
+      return render(request, 'realtimechecking.html', context)
+      
+      
+      
     if fake_news_model == "LSTM":
       import tensorflow as tf
+      from sklearn.feature_extraction.text import TfidfVectorizer
       import numpy as np
       import pandas as pd
       import matplotlib.pyplot as plt
@@ -34,6 +170,7 @@ def test(request):
       from sklearn.model_selection import train_test_split
       from sklearn.metrics import classification_report, accuracy_score
       import pickle
+      
 
       # Load the model
       lstm_model = tf.keras.models.load_model('home/static/imporvedfake.keras')
@@ -42,13 +179,21 @@ def test(request):
       with redirect_stdout(summary_str):
         lstm_model.summary()
       
-      print(lstm_model.summary())
+      # print(lstm_model.summary())
       
       # Load the tokenizer from the file
       with open('home/static/tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
 
-        
+      
+      # ranked_indices = similarities.argsort()[::-1]
+      # print(ranked_indices)
+
+      # Display the ranked articles and their similarity scores
+      # for index in ranked_indices:
+      #     print(f"Article: {articles[index]}")
+      #     print(f"Similarity: {similarities[index]:.4f}\n")
+      
       news = news.lower()
       news_list = [news]
       maxlen = 1000
@@ -62,7 +207,7 @@ def test(request):
                 'result':result,
                 'model_selected':fake_news_model}
       
-      return render(request, 'test.html', context)
+      return render(request, 'othermodelchecking.html', context)
     
     elif fake_news_model == "BERT":
       import numpy as np
@@ -145,7 +290,7 @@ def test(request):
       
       
       
-      return render(request,'test.html', context)
+      return render(request,'othermodelchecking.html', context)
     
     elif fake_news_model == "SVM":
       import numpy as np
@@ -381,7 +526,7 @@ def test(request):
                 'result':result,
                 'model_selected':fake_news_model}
       
-      return render(request, "test.html", context)
+      return render(request, "othermodelchecking.html", context)
       
       
     
@@ -619,12 +764,12 @@ def test(request):
                 'result':result,
                 'model_selected':fake_news_model}
       
-      return render(request, "test.html", context)
+      return render(request, "othermodelchecking.html", context)
     
       
     
   else:    
-    return render(request, "test.html" )
+    return render(request, "othermodelchecking.html" )
     
 
 
@@ -708,7 +853,9 @@ def test(request):
   
   
   
-def about(request):
-  return render(request,'about.html')
+def compare(request):
+
+  
+  return render(request,'compare.html')
     
 

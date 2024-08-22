@@ -10,9 +10,14 @@
   <p class = "text-xl mb-2"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select a model: </p>
   <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline mb-5" name = "model" >
     <option value="BERT" {% if model_selected == "BERT" %}selected{% endif %}>BERT</option>
+
     <option value ="LSTM" {% if model_selected == "LSTM" %}selected{% endif %}>LSTM</option>
+
     <option value ="Logistic Regression" {% if model_selected == "Logistic Regression" %}selected{% endif %}>Logistic Regression</option> 
+
     <option value ="SVM" {% if model_selected == "SVM" %}selected{% endif %}>SVM</option>
+
+    <option value ="Real-Time Checking" {% if model_selected == "Real-Time Checking" %}selected{% endif %}>Real-Time Checking</option>
     
   </select>
   <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -31,21 +36,9 @@
 </div>
 
 </form>
+{% block checking %}
 
-<div>
-  {% if result == 0 %}
-  <div class = "result" id = "false">This News seems to be Fake &nbsp; <svg class="inline-block tick h-10 w-10 text-red-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />  <line x1="9" y1="9" x2="15" y2="15" />  <line x1="15" y1="9" x2="9" y2="15" /></svg></div>
-  {% elif result == 1 %}
-  <div class = "result" id = "true">This News seems to be Real &nbsp; <svg class="tick inline-block h-10 w-10 text-green-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="9 11 12 14 22 4" />  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg></div>
-  {% else %}
-
-  {% endif %}
-</div>
-
-
-
-     
-
+{% endblock checking %}
 {% endblock body %}
 
 

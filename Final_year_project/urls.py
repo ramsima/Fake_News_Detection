@@ -24,5 +24,5 @@ urlpatterns = [
     path('test/', test, name = "test"),
     # path('testing/', posting, name = "posting"),
     # path('testbert/', testbert, name = "testbert"),
-    path('about/', about, name = "about"),
+    path('compare/', compare, name = "compare"),
 ]

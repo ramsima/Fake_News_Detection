@@ -160,7 +160,7 @@ Xv_test = tfidf_vectorizer.transform(X_test)
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split, GridSearchCV
 
-svm = SVC()
+svm = SVC(kernel='rbf',C=4)
 
 
 svm.fit(Xv_train, y_train)
@@ -173,7 +173,7 @@ print(pred_svm)
 
 # Save the model
 # with open('svm_model.pkl', 'wb') as file:
-#     pickle.dump(svm, file)
+#      pickle.dump(svm, file)
 
 
 #y_pred = best_svm.predict(X_test)

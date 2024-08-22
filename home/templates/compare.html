@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Compare Page{% endblock title %}
+
+{% block body %}
+
+
+<div class="container">
+  <h1 class="jptrand">Model Comparison</h1>
+  <table>
+      <thead>
+          <tr>
+              <th>Model</th>
+              <th>Accuracy</th>
+              <th>F1-Score</th>
+              <th>Precision</th>
+              <th>Recall</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>BERT</td>
+              <td>94%</td>
+              <td>94%</td>
+              <td>91%</td>
+              <td>91%</td>
+          </tr>
+          <tr>
+              <td>LSTM</td>
+              <td>100%</td>
+              <td>100%</td>
+              <td>100%</td>
+              <td>100%</td>
+          </tr>
+          <tr>
+              <td>LR (Logistic Regression)</td>
+              <td>98%</td>
+              <td>98%</td>
+              <td>98%</td>
+              <td>98%</td>
+          </tr>
+          <tr>
+              <td>SVM (Support Vector Machine)</td>
+              <td>99%</td>
+              <td>99%</td>
+              <td>99%</td>
+              <td>99%</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+<img src="../static/images/Comparision.png">
+
+<br>
+<br>
+<div class="container">
+  <h1 class="jptrand">Computational Efficiency Table</h1>
+  <table>
+      <thead>
+          <tr>
+              <th>Model</th>
+              <th>Training Time</th>
+              <th>Inference Time</th>
+              <th>Memory Usage</th>
+              
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>BERT</td>
+              <td>Around 20 hours</td>
+              <td>Around 7 seconds</td>
+              <td>Very High </td>
+              
+          </tr>
+          <tr>
+              <td>LSTM</td>
+              <td>Around 10 hours</td>
+              <td>Around 5 seconds</td>
+              <td>High</td>
+              
+          </tr>
+          <tr>
+              <td>LR (Logistic Regression)</td>
+              <td>Around 2 hours</td>
+              <td>Around 4 seconds</td>
+              <td>Low</td>
+              
+          </tr>
+          <tr>
+              <td>SVM (Support Vector Machine)</td>
+              <td>Around 4 hours</td>
+              <td>Around 3 seconds</td>
+              <td>Medium</td>
+              
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+
+
+<br>
+<br>
+<div class="container">
+  <h1 class="jptrand">Algorithmic Difference</h1>
+  <table>
+      <thead>
+          <tr>
+              <th>Model</th>
+              <th>Description</th>
+              <th>Strengths</th>
+              <th>Weaknesses</th>
+              
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>BERT</td>
+              <td>BERT is a transformer-based model that reads text bidirectionally, meaning it considers the context from both directions (left-to-right and right-to-left) to understand the meaning of words in context.</td>
+              <td>Excellent for understanding the context of words in sentences, handles complex language tasks well, pre-trained on large datasets which can be fine-tuned for specific tasks.</td>
+              <td>Very resource-intensive, high computational and memory requirements, may be overkill for simpler tasks.</td>
+              
+          </tr>
+          <tr>
+              <td>LSTM</td>
+              <td>LSTM is a type of recurrent neural network (RNN) designed to learn long-term dependencies in sequential data. It is particularly good at handling time-series data or text where context over time is important.
+              </td>
+              <td>Captures long-term dependencies, handles sequences effectively, good for tasks like text classification and sentiment analysis.
+              </td>
+              <td>Computationally intensive, can be slow to train, requires large amounts of data to generalize well.</td>
+              
+          </tr>
+          <tr>
+              <td>LR (Logistic Regression)</td>
+              <td>Logistic Regression is a linear model used for binary classification. It estimates the probability of a binary outcome based on one or more predictor variables.
+              </td>
+              <td>Simple to implement, interpretable results, works well when the relationship between features and the outcome is approximately linear.
+              </td>
+              <td>Limited to linear decision boundaries, may perform poorly on complex tasks with non-linear relationships.</td>
+              
+          </tr>
+          <tr>
+              <td>SVM (Support Vector Machine)</td>
+              <td>SVM is a supervised learning algorithm used for classification and regression tasks. It finds the hyperplane that best separates data into different classes.
+              </td>
+              <td>Effective in high-dimensional spaces, robust to overfitting, good for cases where the number of dimensions exceeds the number of samples.
+              </td>
+              <td>Less effective with large datasets, may not perform well with very complex data relationships, requires careful tuning of parameters.
+              </td>
+              
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+            
+
+{% endblock body %}

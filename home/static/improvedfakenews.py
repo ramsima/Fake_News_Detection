@@ -15,7 +15,7 @@ from tensorflow.keras.layers import Dense, Embedding, LSTM, Conv1D, MaxPool1D
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, accuracy_score
 
-fake=pd.read_csv('Fake.csv')
+fake=pd.read_csv('D:\Fake_News_Detection\home\static\Fake.csv')
 fake.columns
 fake['subject'].value_counts()
 plt.figure(figsize=(10,6))
@@ -32,7 +32,11 @@ plt.tight_layout(pad=0)
 plt.show
 
 
-real=pd.read_csv('True.csv')
+real=pd.read_csv('D:\Fake_News_Detection\home\static\True.csv')
+real.columns
+real['subject'].value_counts()
+plt.figure(figsize=(10,6))
+sns.countplot(x='subject',data=real)
 
 text = ' '.join(real['text'].tolist())
 
@@ -197,7 +201,16 @@ model.summary()
 
 X_train, X_test, y_train, y_test = train_test_split(x,y)
 
-model.fit(X_train, y_train, validation_split=0.3,epochs=10)
+history = model.fit(X_train, y_train, validation_split=0.3,epochs=10)
+# Plot the training and validation loss
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Training and Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
 
 
 y_pred = (model.predict(X_test) >=0.5).astype(int)
@@ -211,4 +224,4 @@ pad_sequences(x,maxlen=maxlen)
 (model.predict(b)>=0.5).astype(int)
 
 
-model.save('mporvedfake.keras')
+model.save('improvedfake.keras')

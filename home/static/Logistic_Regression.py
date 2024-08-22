@@ -157,33 +157,50 @@ Xv_train = tfidf_vectorizer.fit_transform(X_train)
 Xv_test = tfidf_vectorizer.transform(X_test)
 
 # Save the model
-with open('LR_tfidf_vectorizer.pkl', 'wb') as file:
-  pickle.dump(tfidf_vectorizer, file)
+# with open('LR_tfidf_vectorizer.pkl', 'wb') as file:
+#   pickle.dump(tfidf_vectorizer, file)
 
 
 
-LR = LogisticRegression()
-
-
+LR = LogisticRegression(penalty='l2', C=1.0, solver='lbfs')
 LR.fit(Xv_train, y_train)
-pred_svm = LR.predict(Xv_test)
+pred_LR = LR.predict(Xv_test)
 
-print(pred_svm)
-
-
+print(pred_LR)
 
 
-# # Save the model
-# with open('LR_model.pkl', 'wb') as file:
-#   pickle.dump(LR, file)
 
 
-#y_pred = best_svm.predict(X_test)
+# Save the model
+with open('LR_model.pkl', 'wb') as file:
+  pickle.dump(LR, file)
+
+
+
 
 # Evaluation
-accuracy = accuracy_score(y_test, pred_svm)
+accuracy = accuracy_score(y_test, pred_LR)
 print(accuracy)
-print(classification_report(y_test, pred_svm))
+print(classification_report(y_test, pred_LR))
+
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+import scikitplot as skplt 
+# plot charts
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
+
+# normalized confusion matrix
+skplt.metrics.plot_confusion_matrix(y_test, pred_LR, normalize=True,
+                                    title='Normalized Confusion Matrix',
+                                    text_fontsize='large', ax=ax[0])
+
+# confusion matrix
+skplt.metrics.plot_confusion_matrix(y_test, pred_LR,
+                                    title='Confusion Matrix',
+                                    text_fontsize='large', ax=ax[1])
+
+
+
 
 
 
