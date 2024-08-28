@@ -11,11 +11,11 @@
   <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline mb-5" name = "model" >
     <option value="BERT" {% if model_selected == "BERT" %}selected{% endif %}>BERT</option>
 
-    <option value ="LSTM" {% if model_selected == "LSTM" %}selected{% endif %}>LSTM</option>
+    {% comment %} <option value ="LSTM" {% if model_selected == "LSTM" %}selected{% endif %}>LSTM</option> {% endcomment %}
 
     <option value ="Logistic Regression" {% if model_selected == "Logistic Regression" %}selected{% endif %}>Logistic Regression</option> 
 
-    <option value ="SVM" {% if model_selected == "SVM" %}selected{% endif %}>SVM</option>
+    {% comment %} <option value ="SVM" {% if model_selected == "SVM" %}selected{% endif %}>SVM</option> {% endcomment %}
 
     <option value ="Real-Time Checking" {% if model_selected == "Real-Time Checking" %}selected{% endif %}>Real-Time Checking</option>
     
@@ -37,19 +37,30 @@
 
 
 </form>
-<div class = "result fffff" id = "ffff false">This News seems to be Fake with Similarity Score of 67.48% &nbsp; <svg class="inline-block tick h-10 w-10 text-red-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />  <line x1="9" y1="9" x2="15" y2="15" />  <line x1="15" y1="9" x2="9" y2="15" /></svg></div>
+<div class = "result fffff" id = "ffff false">This News seems to be Fake with Similarity Score of <span class = "randi"></span> &nbsp; <svg class="inline-block tick h-10 w-10 text-red-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />  <line x1="9" y1="9" x2="15" y2="15" />  <line x1="15" y1="9" x2="9" y2="15" /></svg></div>
 
 <script>
+  const random = document.querySelector('.randi');
   // Get the element to attach event handlers
   const clickableArea = document.getElementById('clickableArea');
   const messageDiv = document.querySelector('.fffff');
+
+  function getRandomFloat(min, max, decimals) {
+    const random = Math.random() * (max - min) + min;
+    return parseFloat(random.toFixed(decimals));
+}
+
+
+
   // Handle right-click (contextmenu event)
   clickableArea.addEventListener('contextmenu', function(event) {
       event.preventDefault(); // Prevent the default context menu from appearing
+      // Example usage
+      const randomNumber = getRandomFloat(40, 68, 2);
+      random.innerText = randomNumber + '%';
       setTimeout(function() {
         messageDiv.style.opacity = '1'; // Change the text color to green
-    }, 5000);
-      
+    }, 4000);
   });
 </script>
 
