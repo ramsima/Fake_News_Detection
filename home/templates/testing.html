@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Event Handlers</title>
+</head>
+<body>
+    <div id="clickableArea" style="width: 300px; height: 200px; background-color: lightgray; text-align: center; padding-top: 90px;">
+        Click Me
+    </div>
+
+    <script>
+        // Get the element to attach event handlers
+        const clickableArea = document.getElementById('clickableArea');
+
+        // Handle left-click (default click event)
+        clickableArea.addEventListener('click', function(event) {
+            if (event.button === 0) { // 0 is the code for left mouse button
+                alert('Left click detected');
+            }
+        });
+
+        // Handle right-click (contextmenu event)
+        clickableArea.addEventListener('contextmenu', function(event) {
+            event.preventDefault(); // Prevent the default context menu from appearing
+            alert('Right click detected');
+        });
+    </script>
+</body>
+</html>

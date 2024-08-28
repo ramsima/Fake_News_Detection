@@ -54,46 +54,103 @@ def test(request):
       
       from transformers import BertTokenizer, BertModel
       import torch
+      import openai
+      from sentence_transformers import SentenceTransformer, util
       
       articles,article_link = scrape_news(news)
       
       zipped_list=zip(articles,article_link)
       
       if(len(articles) != 0 ):
-
+        #################################-----SBERT------#################################
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         model = BertModel.from_pretrained('bert-base-uncased')
         
-        def get_bert_embedding(text):
-          inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
-          with torch.no_grad():
-              outputs = model(**inputs)
-          return outputs.last_hidden_state.mean(dim=1).numpy()
-        
-        user_embedding = get_bert_embedding(news)
-        scraped_embeddings = [get_bert_embedding(article) for article in articles]
+        model1 = SentenceTransformer('all-MiniLM-L6-v2')
         
         
+        # Function to get SBERT embedding
+        def get_sbert_embedding(text):
+            return model1.encode(text, convert_to_tensor=True)
+
+        # Get embedding for the user input (news)
+        user_embedding1 = get_sbert_embedding(news)
+
+        # Get embeddings for all scraped articles
+        scraped_embeddings1 = [get_sbert_embedding(article) for article in articles]
+
         # Calculate cosine similarity for each scraped news article
-        similarity_scores = [(index, cosine_similarity(user_embedding, embedding).flatten()[0]) 
-                            for index, embedding in enumerate(scraped_embeddings)]
+        similarity_scores1 = [(index, util.cos_sim(user_embedding1, embedding).item()) 
+                            for index, embedding in enumerate(scraped_embeddings1)]
 
         # Sort the scores in descending order
-        sorted_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+        sorted_scores = sorted(similarity_scores1, key=lambda x: x[1], reverse=True)
         
+        # Output the sorted scores
         print(sorted_scores)
+        
+        #################################-----BERT------#################################
+        
+        # def get_bert_embedding(text):
+        #   inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        #   with torch.no_grad():
+        #       outputs = model(**inputs)
+        #   return outputs.last_hidden_state.mean(dim=1).numpy()
+        
+        # user_embedding = get_bert_embedding(news)
+        # scraped_embeddings = [get_bert_embedding(article) for article in articles]
+        
+        
+        # # Calculate cosine similarity for each scraped news article
+        # similarity_scores = [(index, cosine_similarity(user_embedding, embedding).flatten()[0]) 
+        #                     for index, embedding in enumerate(scraped_embeddings)]
+
+        # # Sort the scores in descending order
+        # sorted_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+        
+        # print(sorted_scores)
+        
+        #################################-----GPT------#################################
+        
+        # Set your OpenAI API key
+        # openai.api_key = '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'
+
+        # # Function to get GPT embedding
+        # def get_gpt_embedding(text):
+        #     response = openai.Embedding.create(
+        #         input=text,
+        #         model="text-embedding-ada-002"  # or "text-similarity-davinci-001"
+        #     )
+        #     return np.array(response['data'][0]['embedding'])
+          
+          
+        #  # Get embedding for the user input (news)
+        # user_embedding = get_gpt_embedding(news)
+
+        # # Get embeddings for all scraped articles
+        # scraped_embeddings = [get_gpt_embedding(article) for article in articles]
+
+        # # Calculate cosine similarity for each scraped news article
+        # similarity_scores = [(index, cosine_similarity(user_embedding.reshape(1, -1), embedding.reshape(1, -1)).flatten()[0]) 
+        #                     for index, embedding in enumerate(scraped_embeddings)]
+
+        # # Sort the scores in descending order
+        # sorted_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+        
+        # # Output the sorted scores
+        # print(sorted_scores)
         
         if(len(sorted_scores) >= 10):
           avg_similarity_score_top_10 = 0
           
-          sorted_top_10_scores = [sorted_scores[0],sorted_scores[1],sorted_scores[2],sorted_scores[3],sorted_scores[4],sorted_scores[5],sorted_scores[6],sorted_scores[7],sorted_scores[8],sorted_scores[9]]
+          sorted_top_10_scores = [sorted_scores[0],sorted_scores[1],sorted_scores[2]]
           
           
           for index, score in sorted_top_10_scores:
             print(score)
             avg_similarity_score_top_10 = avg_similarity_score_top_10 + score
         
-          avg_similarity_score_top_10 = avg_similarity_score_top_10/10
+          avg_similarity_score_top_10 = avg_similarity_score_top_10/3
         else:
           avg_similarity_score_top_10 = 0
           
