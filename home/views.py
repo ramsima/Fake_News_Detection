@@ -113,7 +113,7 @@ def test(request):
         #################################-----GPT------#################################
         
         # Set your OpenAI API key
-        # openai.api_key = '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'
+        # openai.api_key = 'your-api-key'
 
         # # Function to get GPT embedding
         # def get_gpt_embedding(text):
